@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package server;
+
+service CdnServer {
+  rpc StreamVideo(VideoRequest) returns (stream Chunk);
+  rpc UploadVideo(stream UploadRequest) returns (UploadResponse);
+
+}
+
+message VideoRequest {
+    string videoId = 1;
+}
+
+message Chunk {
+  bytes chunk = 1;
+}
+
+
+message UploadRequest {
+    Chunk chunk = 1;
+}
+
+message UploadResponse {
+    string ack = 1;
+}
+
