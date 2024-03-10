@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package server;
+
+service CdnServer {
+  rpc StreamVideo(VideoRequest) returns (stream Chunk);
+  rpc UploadVideo(stream UploadRequest) returns (UploadResponse);
+  rpc RequestToUpload(UploadToServerRequest) returns (UploadResponse);
+  rpc Watch(WatchRequest) returns (google.protobuf.Empty);
+  rpc WatchWith(WatchPartyRequest) returns (PartyResponse);
+  rpc PauseParty(WatchParty) returns (PartyResponse);
+}
+
+message VideoRequest {
+    string videoId = 1;
+}
+
+message Chunk {
+  bytes chunk = 1;
+}
+
+message UploadRequest {
+    Chunk chunk = 1;
+}
+
+message UploadResponse {
+    string ack = 1;
+}
+
+message UploadToServerRequest {
+    string title = 1;
+    string filename = 2;
+}
+
+message WatchRequest {
+    string clientId = 1;
+    string videoId = 2;
+    int64 time = 3;
+}
+
+message WatchPartyRequest {
+}
+
+message WatchParty {
+}
+
+message PartyResponse {
+
+}

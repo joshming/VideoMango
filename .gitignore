@@ -1,2 +1,10 @@
 .idea/
 videoDatabase.db
+videos/*
+!videos/.keep
+clientvideos/*
+!clientvideos/.keep
+**/__pycache__/
+
+*.m*
+.*.gz
