@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12proto/server.proto\x12\x06server\x1a\x1bgoogle/protobuf/empty.proto\"\x1f\n\x0cVideoRequest\x12\x0f\n\x07videoId\x18\x01 \x01(\t\"\x16\n\x05\x43hunk\x12\r\n\x05\x63hunk\x18\x01 \x01(\x0c\"-\n\rUploadRequest\x12\x1c\n\x05\x63hunk\x18\x01 \x01(\x0b\x32\r.server.Chunk\"\x1d\n\x0eUploadResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\t\"8\n\x15UploadToServerRequest\x12\r\n\x05title\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\"?\n\x0cWatchRequest\x12\x10\n\x08\x63lientId\x18\x01 \x01(\t\x12\x0f\n\x07videoId\x18\x02 \x01(\t\x12\x0c\n\x04time\x18\x03 \x01(\x03\"\x13\n\x11WatchPartyRequest\"\x0c\n\nWatchParty\"\x0f\n\rPartyResponse2\xfa\x02\n\tCdnServer\x12\x34\n\x0bStreamVideo\x12\x14.server.VideoRequest\x1a\r.server.Chunk0\x01\x12>\n\x0bUploadVideo\x12\x15.server.UploadRequest\x1a\x16.server.UploadResponse(\x01\x12H\n\x0fRequestToUpload\x12\x1d.server.UploadToServerRequest\x1a\x16.server.UploadResponse\x12\x35\n\x05Watch\x12\x14.server.WatchRequest\x1a\x16.google.protobuf.Empty\x12=\n\tWatchWith\x12\x19.server.WatchPartyRequest\x1a\x15.server.PartyResponse\x12\x37\n\nPauseParty\x12\x12.server.WatchParty\x1a\x15.server.PartyResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12proto/server.proto\x12\x06server\x1a\x1bgoogle/protobuf/empty.proto\"\x1f\n\x0cVideoRequest\x12\x0f\n\x07videoId\x18\x01 \x01(\x05\"\x16\n\x05\x43hunk\x12\r\n\x05\x63hunk\x18\x01 \x01(\x0c\"-\n\rUploadRequest\x12\x1c\n\x05\x63hunk\x18\x01 \x01(\x0b\x32\r.server.Chunk\"\x1d\n\x0eUploadResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\t\"8\n\x15UploadToServerRequest\x12\r\n\x05title\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\"?\n\x0cWatchRequest\x12\x10\n\x08\x63lientId\x18\x01 \x01(\t\x12\x0f\n\x07videoId\x18\x02 \x01(\t\x12\x0c\n\x04time\x18\x03 \x01(\x03\"\x13\n\x11WatchPartyRequest\"\x0c\n\nWatchParty\"\x0f\n\rPartyResponse\"&\n\tVideoInfo\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t2\xf7\x03\n\tCdnServer\x12;\n\x0cgetAllVideos\x12\x16.google.protobuf.Empty\x1a\x11.server.VideoInfo0\x01\x12>\n\x13getVideoInformation\x12\x14.server.VideoRequest\x1a\x11.server.VideoInfo\x12\x34\n\x0bStreamVideo\x12\x14.server.VideoRequest\x1a\r.server.Chunk0\x01\x12>\n\x0bUploadVideo\x12\x15.server.UploadRequest\x1a\x16.server.UploadResponse(\x01\x12H\n\x0fRequestToUpload\x12\x1d.server.UploadToServerRequest\x1a\x16.server.UploadResponse\x12\x35\n\x05Watch\x12\x14.server.WatchRequest\x1a\x16.google.protobuf.Empty\x12=\n\tWatchWith\x12\x19.server.WatchPartyRequest\x1a\x15.server.PartyResponse\x12\x37\n\nPauseParty\x12\x12.server.WatchParty\x1a\x15.server.PartyResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -40,6 +40,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_WATCHPARTY']._serialized_end=350
   _globals['_PARTYRESPONSE']._serialized_start=352
   _globals['_PARTYRESPONSE']._serialized_end=367
-  _globals['_CDNSERVER']._serialized_start=370
-  _globals['_CDNSERVER']._serialized_end=748
+  _globals['_VIDEOINFO']._serialized_start=369
+  _globals['_VIDEOINFO']._serialized_end=407
+  _globals['_CDNSERVER']._serialized_start=410
+  _globals['_CDNSERVER']._serialized_end=913
 # @@protoc_insertion_point(module_scope)

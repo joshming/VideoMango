@@ -10,6 +10,7 @@ from proto import server_pb2_grpc, server_pb2
 from serverpackage.videodatabase import VideoDatabase
 
 CHUNK_SIZE = 1024 * 1024
+VIDEO_PATH = "./videos/"
 
 
 class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
@@ -22,8 +23,17 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def __init__(self):
         self.video_database = VideoDatabase()
 
+    def getAllVideos(self, request, context):
+        result = self.video_database.get_all_videos()
+        for row in result:
+            yield server_pb2.VideoInfo(id=row[0], title=row[1])
+
+    def getVideoInformation(self, request, context):
+        result = self.video_database.get_video_information(request.videoId)
+        return server_pb2.VideoInfo(id=result[0], title=result[1])
+
     def StreamVideo(self, request, context):
-        location = self.video_database.fetch(request.videoId)
+        location = VIDEO_PATH + self.video_database.fetch(request.videoId)
         with open(location, 'rb') as video:
             chunk = 1
             while chunk:

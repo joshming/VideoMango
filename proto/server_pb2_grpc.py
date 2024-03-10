@@ -15,6 +15,16 @@ class CdnServerStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.getAllVideos = channel.unary_stream(
+                '/server.CdnServer/getAllVideos',
+                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                response_deserializer=proto_dot_server__pb2.VideoInfo.FromString,
+                )
+        self.getVideoInformation = channel.unary_unary(
+                '/server.CdnServer/getVideoInformation',
+                request_serializer=proto_dot_server__pb2.VideoRequest.SerializeToString,
+                response_deserializer=proto_dot_server__pb2.VideoInfo.FromString,
+                )
         self.StreamVideo = channel.unary_stream(
                 '/server.CdnServer/StreamVideo',
                 request_serializer=proto_dot_server__pb2.VideoRequest.SerializeToString,
@@ -49,6 +59,18 @@ class CdnServerStub(object):
 
 class CdnServerServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def getAllVideos(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def getVideoInformation(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def StreamVideo(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -89,6 +111,16 @@ class CdnServerServicer(object):
 
 def add_CdnServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'getAllVideos': grpc.unary_stream_rpc_method_handler(
+                    servicer.getAllVideos,
+                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                    response_serializer=proto_dot_server__pb2.VideoInfo.SerializeToString,
+            ),
+            'getVideoInformation': grpc.unary_unary_rpc_method_handler(
+                    servicer.getVideoInformation,
+                    request_deserializer=proto_dot_server__pb2.VideoRequest.FromString,
+                    response_serializer=proto_dot_server__pb2.VideoInfo.SerializeToString,
+            ),
             'StreamVideo': grpc.unary_stream_rpc_method_handler(
                     servicer.StreamVideo,
                     request_deserializer=proto_dot_server__pb2.VideoRequest.FromString,
@@ -128,6 +160,40 @@ def add_CdnServerServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class CdnServer(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def getAllVideos(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/server.CdnServer/getAllVideos',
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            proto_dot_server__pb2.VideoInfo.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def getVideoInformation(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/server.CdnServer/getVideoInformation',
+            proto_dot_server__pb2.VideoRequest.SerializeToString,
+            proto_dot_server__pb2.VideoInfo.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def StreamVideo(request,

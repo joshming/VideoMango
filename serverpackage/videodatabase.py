@@ -1,5 +1,7 @@
 import sqlite3
 
+from typing import List, Tuple, Any
+
 LOCATION = "videoDatabase.db"
 TABLE = "videos"
 ID = "id"
@@ -23,6 +25,8 @@ def _createTable() -> None:
 class VideoDatabase:
     """
     Opens up the connection to the CDN video database
+
+    this likely doesn't need to be a class, but whatever
     """
 
     def __init__(self):
@@ -40,7 +44,7 @@ class VideoDatabase:
     def fetch(self, id: int) -> str:
         conn = sqlite3.connect(LOCATION)
         cursor = conn.cursor()
-        sql = "select title from videos where id= " + id
+        sql = f"select file from videos where id={id}"
         cursor.execute(sql)
         result = cursor.fetchone()
         conn.commit()
@@ -69,6 +73,33 @@ class VideoDatabase:
         sql = f"select MAX(id), file from videos"
         cursor.execute(sql)
         result = cursor.fetchone()
+        cursor.close()
         conn.commit()
         conn.close()
         return result[1]
+
+    def get_all_videos(self) -> List[Tuple[Any]]:
+        """
+        retrieves all information about the rows
+        :return: the rows represented as a list of tuples of any types
+        """
+        conn = sqlite3.connect(LOCATION)
+        cursor = conn.cursor()
+        sql = f"select id, file from videos"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return result
+
+    def get_video_information(self, id: int) -> Tuple[Any]:
+        conn = sqlite3.connect(LOCATION)
+        cursor = conn.cursor()
+        sql = f"select id, file from videos where id={id}"
+        cursor.execute(sql)
+        result = cursor.fetchone()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return result

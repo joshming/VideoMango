@@ -5,6 +5,8 @@ import "google/protobuf/empty.proto";
 package server;
 
 service CdnServer {
+  rpc getAllVideos(google.protobuf.Empty) returns (stream VideoInfo);
+  rpc getVideoInformation(VideoRequest) returns (VideoInfo);
   rpc StreamVideo(VideoRequest) returns (stream Chunk);
   rpc UploadVideo(stream UploadRequest) returns (UploadResponse);
   rpc RequestToUpload(UploadToServerRequest) returns (UploadResponse);
@@ -14,7 +16,7 @@ service CdnServer {
 }
 
 message VideoRequest {
-    string videoId = 1;
+    int32 videoId = 1;
 }
 
 message Chunk {
@@ -48,4 +50,9 @@ message WatchParty {
 
 message PartyResponse {
 
+}
+
+message VideoInfo {
+    int32 id = 1;
+    string title = 2;
 }
