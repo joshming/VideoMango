@@ -8,3 +8,4 @@ clientvideos/*
 
 *.m*
 .*.gz
+!README.md
