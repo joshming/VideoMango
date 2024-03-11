@@ -44,7 +44,7 @@ class VideoDatabase:
     def fetch(self, id: int) -> str:
         conn = sqlite3.connect(LOCATION)
         cursor = conn.cursor()
-        sql = f"select file from videos where id={id}"
+        sql = f"select title, file from videos where id={id}"
         cursor.execute(sql)
         result = cursor.fetchone()
         conn.commit()

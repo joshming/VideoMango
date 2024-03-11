@@ -32,7 +32,7 @@ class CdnServerStub(object):
                 )
         self.UploadVideo = channel.stream_unary(
                 '/server.CdnServer/UploadVideo',
-                request_serializer=proto_dot_server__pb2.UploadRequest.SerializeToString,
+                request_serializer=proto_dot_server__pb2.Chunk.SerializeToString,
                 response_deserializer=proto_dot_server__pb2.UploadResponse.FromString,
                 )
         self.RequestToUpload = channel.unary_unary(
@@ -128,7 +128,7 @@ def add_CdnServerServicer_to_server(servicer, server):
             ),
             'UploadVideo': grpc.stream_unary_rpc_method_handler(
                     servicer.UploadVideo,
-                    request_deserializer=proto_dot_server__pb2.UploadRequest.FromString,
+                    request_deserializer=proto_dot_server__pb2.Chunk.FromString,
                     response_serializer=proto_dot_server__pb2.UploadResponse.SerializeToString,
             ),
             'RequestToUpload': grpc.unary_unary_rpc_method_handler(
@@ -224,7 +224,7 @@ class CdnServer(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.stream_unary(request_iterator, target, '/server.CdnServer/UploadVideo',
-            proto_dot_server__pb2.UploadRequest.SerializeToString,
+            proto_dot_server__pb2.Chunk.SerializeToString,
             proto_dot_server__pb2.UploadResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

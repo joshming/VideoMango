@@ -8,7 +8,7 @@ service CdnServer {
   rpc getAllVideos(google.protobuf.Empty) returns (stream VideoInfo);
   rpc getVideoInformation(VideoRequest) returns (VideoInfo);
   rpc StreamVideo(VideoRequest) returns (stream Chunk);
-  rpc UploadVideo(stream UploadRequest) returns (UploadResponse);
+  rpc UploadVideo(stream Chunk) returns (UploadResponse);
   rpc RequestToUpload(UploadToServerRequest) returns (UploadResponse);
   rpc Watch(WatchRequest) returns (google.protobuf.Empty);
   rpc WatchWith(WatchPartyRequest) returns (PartyResponse);

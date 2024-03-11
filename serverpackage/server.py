@@ -33,11 +33,12 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
         return server_pb2.VideoInfo(id=result[0], title=result[1])
 
     def StreamVideo(self, request, context):
-        location = VIDEO_PATH + self.video_database.fetch(request.videoId)
-        with open(location, 'rb') as video:
-            chunk = 1
-            while chunk:
-                chunk = video.read(CHUNK_SIZE)
+        video = self.video_database.fetch(request.videoId)
+        location = VIDEO_PATH + video[1] + ".mp4"
+        title = video[0]
+        with open(location, 'rb') as file:
+            while True:
+                chunk = file.read(CHUNK_SIZE)
                 if len(chunk) == 0:
                     return
                 yield server_pb2.Chunk(chunk=chunk)
@@ -55,13 +56,13 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def UploadVideo(self, request_iterator, context):
         # have to save it to the local storage
         file = self.video_database.get_most_recent_file()
-        self._save(request_iterator, file + ".gz")
+        self._save(request_iterator, file + ".mp4")
         return server_pb2.UploadResponse(ack="OK")
 
     def _save(self, chunks, filename):
-        with open(filename, 'wb') as f:
+        with open(VIDEO_PATH + filename, 'wb') as f:
             for chunk in chunks:
-                f.write(chunk.chunk.chunk)
+                f.write(chunk.chunk)
 
 
 def serve() -> server:
