@@ -1,20 +1,17 @@
-import gzip
 import os
-import time
 from typing import Dict, Any
 
 import google
 import grpc
 
-from clientpackage.fileutils.fileutils import compress, decompress
 from proto import server_pb2_grpc, server_pb2
 
 CHUNK_SIZE = 1024 * 1024
 CLIENT_PATH = "./clientvideos/"
-
+VIDEO_EXTENSION = ".mp4"
 
 def create_upload_iterator(filename: str):
-    filename = filename + ".mp4"
+    filename = filename + VIDEO_EXTENSION
     with open(filename, 'rb') as compressed_file:
         while True:
             chunk = compressed_file.read(CHUNK_SIZE)
@@ -53,7 +50,7 @@ def get_movie_information_by_id(id: int) -> Dict[str, Any]:
 
 
 def save(response_iterator, title: str):
-    with open(CLIENT_PATH + title + ".mp4", 'wb') as f:
+    with open(CLIENT_PATH + title + VIDEO_EXTENSION, 'wb') as f:
         for response in response_iterator:
             f.write(response.chunk)
     return title
@@ -64,8 +61,7 @@ def retrieve_video(id: int, title: str):
         stub = server_pb2_grpc.CdnServerStub(channel)
         response_iterator = stub.StreamVideo(server_pb2.VideoRequest(videoId=id))
         filename = save(response_iterator, title)
-    return filename + ".mp4"
-    # return file + ".mp4"
+    return filename + VIDEO_EXTENSION
 
 
 def main():

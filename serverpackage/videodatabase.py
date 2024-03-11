@@ -1,4 +1,5 @@
 import sqlite3
+from sqlite3 import Connection, Cursor
 
 from typing import List, Tuple, Any
 
@@ -7,6 +8,16 @@ TABLE = "videos"
 ID = "id"
 TITLE = "title"
 LENGTH = "length"
+
+
+def create_connection() -> tuple[Connection, Cursor]:
+    """
+    Creates a connection to the database and a cursor for that connection
+    :return: Tuple of a connection and a cursor
+    """
+    connection = sqlite3.connect(LOCATION)
+    cursor = connection.cursor()
+    return connection, cursor
 
 
 def _createTable() -> None:
@@ -33,8 +44,7 @@ class VideoDatabase:
         _createTable()
 
     def upload(self, title: str, file: str) -> None:
-        conn = sqlite3.connect(LOCATION)
-        cursor = conn.cursor()
+        conn, cursor = create_connection()
         sql = f'insert into videos (title, file) values (\"{title}\", \"{file}\")'
         cursor.execute(sql)
         conn.commit()
@@ -42,8 +52,7 @@ class VideoDatabase:
         conn.close()
 
     def fetch(self, id: int) -> str:
-        conn = sqlite3.connect(LOCATION)
-        cursor = conn.cursor()
+        conn, cursor = create_connection()
         sql = f"select title, file from videos where id={id}"
         cursor.execute(sql)
         result = cursor.fetchone()
@@ -53,8 +62,7 @@ class VideoDatabase:
         return result
 
     def checkTitle(self, title: str) -> bool:
-        conn = sqlite3.connect(LOCATION)
-        cursor = conn.cursor()
+        conn, cursor = create_connection()
         sql = f"select * from videos where title=\"{title}\""
         cursor.execute(sql)
         result = cursor.fetchone()
@@ -68,8 +76,7 @@ class VideoDatabase:
         Retrieve the most recent movie
         :return:
         """
-        conn = sqlite3.connect(LOCATION)
-        cursor = conn.cursor()
+        conn, cursor = create_connection()
         sql = f"select MAX(id), file from videos"
         cursor.execute(sql)
         result = cursor.fetchone()
@@ -83,8 +90,7 @@ class VideoDatabase:
         retrieves all information about the rows
         :return: the rows represented as a list of tuples of any types
         """
-        conn = sqlite3.connect(LOCATION)
-        cursor = conn.cursor()
+        conn, cursor = create_connection()
         sql = f"select id, file from videos"
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -94,8 +100,7 @@ class VideoDatabase:
         return result
 
     def get_video_information(self, id: int) -> Tuple[Any]:
-        conn = sqlite3.connect(LOCATION)
-        cursor = conn.cursor()
+        conn, cursor = create_connection()
         sql = f"select id, file from videos where id={id}"
         cursor.execute(sql)
         result = cursor.fetchone()

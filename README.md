@@ -1,4 +1,4 @@
-# Video Mango 
+# MeerkatVideo
 
 A video streaming platform to allow you and your friends watch movies together 
 
@@ -6,11 +6,17 @@ A video streaming platform to allow you and your friends watch movies together
 - Python 3.9+
 - gRPC
 - fastAPI
+- SQLite3
 
 ## Run instructions
 To start the backend server
 ```{shell}
 python startserver.py
+```
+
+To start the client rpc application
+```{shell}
+python startclient.py
 ```
 
 to start the REST API

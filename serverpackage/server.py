@@ -11,6 +11,7 @@ from serverpackage.videodatabase import VideoDatabase
 
 CHUNK_SIZE = 1024 * 1024
 VIDEO_PATH = "./videos/"
+VIDEO_EXTENSION = ".mp4"
 
 
 class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
@@ -34,8 +35,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
 
     def StreamVideo(self, request, context):
         video = self.video_database.fetch(request.videoId)
-        location = VIDEO_PATH + video[1] + ".mp4"
-        title = video[0]
+        location = VIDEO_PATH + video[1] + VIDEO_EXTENSION
         with open(location, 'rb') as file:
             while True:
                 chunk = file.read(CHUNK_SIZE)
@@ -56,7 +56,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def UploadVideo(self, request_iterator, context):
         # have to save it to the local storage
         file = self.video_database.get_most_recent_file()
-        self._save(request_iterator, file + ".mp4")
+        self._save(request_iterator, file + VIDEO_EXTENSION)
         return server_pb2.UploadResponse(ack="OK")
 
     def _save(self, chunks, filename):

@@ -18,3 +18,7 @@ async def get_movie_information_by_id(id: int):
 @app.get("/stream/{id}")
 async def stream_movie(id: int, title: str):
     return client.retrieve_video(id, title)
+
+@app.post("/upload")
+async def upload_movie(title: str, filename: str):
+    return client.upload(title, filename)
