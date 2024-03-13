@@ -25,7 +25,8 @@ def _createTable() -> None:
     Creates the database table
     :return: None
     """
-    sql = 'create table if not exists ' + TABLE + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, file TEXT)'
+    sql = 'create table if not exists ' + TABLE + ('(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, file TEXT, '
+                                                   'size INTEGER)')
     conn = sqlite3.connect(LOCATION)
     cursor = conn.cursor()
     cursor.execute(sql)
@@ -43,17 +44,17 @@ class VideoDatabase:
     def __init__(self):
         _createTable()
 
-    def upload(self, title: str, file: str) -> None:
+    def upload(self, title: str, file: str, size: int) -> None:
         conn, cursor = create_connection()
-        sql = f'insert into videos (title, file) values (\"{title}\", \"{file}\")'
+        sql = f'insert into videos (title, file, size) values (\"{title}\", \"{file}\", {size})'
         cursor.execute(sql)
         conn.commit()
         cursor.close()
         conn.close()
 
-    def fetch(self, id: int) -> str:
+    def fetch(self, id_: int) -> str:
         conn, cursor = create_connection()
-        sql = f"select title, file from videos where id={id}"
+        sql = f"select title, file from videos where id={id_}"
         cursor.execute(sql)
         result = cursor.fetchone()
         conn.commit()
@@ -101,7 +102,7 @@ class VideoDatabase:
 
     def get_video_information(self, id: int) -> Tuple[Any]:
         conn, cursor = create_connection()
-        sql = f"select id, file from videos where id={id}"
+        sql = f"select id, file, size from videos where id={id}"
         cursor.execute(sql)
         result = cursor.fetchone()
         conn.commit()

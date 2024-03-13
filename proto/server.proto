@@ -10,9 +10,6 @@ service CdnServer {
   rpc StreamVideo(VideoRequest) returns (stream Chunk);
   rpc UploadVideo(stream Chunk) returns (UploadResponse);
   rpc RequestToUpload(UploadToServerRequest) returns (UploadResponse);
-  rpc Watch(WatchRequest) returns (google.protobuf.Empty);
-  rpc WatchWith(WatchPartyRequest) returns (PartyResponse);
-  rpc PauseParty(WatchParty) returns (PartyResponse);
 }
 
 message VideoRequest {
@@ -36,23 +33,8 @@ message UploadToServerRequest {
     string filename = 2;
 }
 
-message WatchRequest {
-    string clientId = 1;
-    string videoId = 2;
-    int64 time = 3;
-}
-
-message WatchPartyRequest {
-}
-
-message WatchParty {
-}
-
-message PartyResponse {
-
-}
-
 message VideoInfo {
     int32 id = 1;
     string title = 2;
+    int64 size = 3;
 }

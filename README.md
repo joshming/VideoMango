@@ -14,11 +14,6 @@ To start the backend server
 python startserver.py
 ```
 
-To start the client rpc application
-```{shell}
-python startclient.py
-```
-
 to start the REST API
 ```{shell}
 uvicorn clientpackage.clientapi:app --reload

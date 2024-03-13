@@ -2,6 +2,7 @@ import time
 
 from concurrent import futures
 from datetime import datetime
+from pathlib import Path
 
 import grpc
 from grpc import server
@@ -31,7 +32,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
 
     def getVideoInformation(self, request, context):
         result = self.video_database.get_video_information(request.videoId)
-        return server_pb2.VideoInfo(id=result[0], title=result[1])
+        return server_pb2.VideoInfo(id=result[0], title=result[1], size=result[2])
 
     def StreamVideo(self, request, context):
         video = self.video_database.fetch(request.videoId)
@@ -46,11 +47,12 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def RequestToUpload(self, request, context):
         title = request.title
         filename = request.filename
+        size = Path(filename + ".mp4").stat().st_size
         if self.video_database.checkTitle(title):
             context.set_code(grpc.StatusCode.ALREADY_EXISTS)
             return server_pb2.UploadResponse(ack="ERROR")
 
-        self.video_database.upload(title, filename)
+        self.video_database.upload(title, filename, size)
         return server_pb2.UploadResponse(ack="OK")
 
     def UploadVideo(self, request_iterator, context):

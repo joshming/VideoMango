@@ -40,21 +40,6 @@ class CdnServerStub(object):
                 request_serializer=proto_dot_server__pb2.UploadToServerRequest.SerializeToString,
                 response_deserializer=proto_dot_server__pb2.UploadResponse.FromString,
                 )
-        self.Watch = channel.unary_unary(
-                '/server.CdnServer/Watch',
-                request_serializer=proto_dot_server__pb2.WatchRequest.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                )
-        self.WatchWith = channel.unary_unary(
-                '/server.CdnServer/WatchWith',
-                request_serializer=proto_dot_server__pb2.WatchPartyRequest.SerializeToString,
-                response_deserializer=proto_dot_server__pb2.PartyResponse.FromString,
-                )
-        self.PauseParty = channel.unary_unary(
-                '/server.CdnServer/PauseParty',
-                request_serializer=proto_dot_server__pb2.WatchParty.SerializeToString,
-                response_deserializer=proto_dot_server__pb2.PartyResponse.FromString,
-                )
 
 
 class CdnServerServicer(object):
@@ -90,24 +75,6 @@ class CdnServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def Watch(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def WatchWith(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def PauseParty(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_CdnServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -135,21 +102,6 @@ def add_CdnServerServicer_to_server(servicer, server):
                     servicer.RequestToUpload,
                     request_deserializer=proto_dot_server__pb2.UploadToServerRequest.FromString,
                     response_serializer=proto_dot_server__pb2.UploadResponse.SerializeToString,
-            ),
-            'Watch': grpc.unary_unary_rpc_method_handler(
-                    servicer.Watch,
-                    request_deserializer=proto_dot_server__pb2.WatchRequest.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'WatchWith': grpc.unary_unary_rpc_method_handler(
-                    servicer.WatchWith,
-                    request_deserializer=proto_dot_server__pb2.WatchPartyRequest.FromString,
-                    response_serializer=proto_dot_server__pb2.PartyResponse.SerializeToString,
-            ),
-            'PauseParty': grpc.unary_unary_rpc_method_handler(
-                    servicer.PauseParty,
-                    request_deserializer=proto_dot_server__pb2.WatchParty.FromString,
-                    response_serializer=proto_dot_server__pb2.PartyResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -243,56 +195,5 @@ class CdnServer(object):
         return grpc.experimental.unary_unary(request, target, '/server.CdnServer/RequestToUpload',
             proto_dot_server__pb2.UploadToServerRequest.SerializeToString,
             proto_dot_server__pb2.UploadResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def Watch(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/server.CdnServer/Watch',
-            proto_dot_server__pb2.WatchRequest.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def WatchWith(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/server.CdnServer/WatchWith',
-            proto_dot_server__pb2.WatchPartyRequest.SerializeToString,
-            proto_dot_server__pb2.PartyResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def PauseParty(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/server.CdnServer/PauseParty',
-            proto_dot_server__pb2.WatchParty.SerializeToString,
-            proto_dot_server__pb2.PartyResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
