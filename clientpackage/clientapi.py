@@ -47,7 +47,18 @@ async def get_movie_information_by_id(id: int) -> Dict:
 
 
 @app.get("/stream/{id_}")
-async def stream_movie(id_: int = 0, range: str = Header(None)):
+async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
+    """
+    Streams the requested movie using the <id> that has been passed in
+
+    each set of bytes returned are considered partial content as the entire video is not sent back to the client,
+    only the amount specified in the range.
+
+    range is part of the header that is automatically sent from the frontend
+    :param id_: the id of the video
+    :param range: range of bytes to be sent back
+    :return: FastAPI.Response object
+    """
     start, end = range.replace("bytes=", "").split("-")
     start = int(start)
     end = int(end) if end else start + CHUNK_SIZE
