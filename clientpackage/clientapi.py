@@ -1,12 +1,12 @@
 import os
-from pathlib import Path
-from typing import Dict, Any
+from typing import Dict
 
 import google
 import grpc
 from fastapi import FastAPI, Response, Header
 from fastapi.middleware.cors import CORSMiddleware
 
+from clientpackage.video import Video
 from proto import server_pb2_grpc, server_pb2
 
 app = FastAPI()
@@ -26,6 +26,8 @@ app.add_middleware(
 CHUNK_SIZE = 1024 * 1024
 VIDEO_EXTENSION = ".mp4"
 
+VIDEO_CACHE = {}
+
 
 @app.get("/movies")
 async def get_all_movies():
@@ -34,7 +36,7 @@ async def get_all_movies():
         response_iterator = stub.getAllVideos(google.protobuf.empty_pb2.Empty())
         videos = []
         for video in response_iterator:
-            videos.append({"id": video.id, "title:": video.title})
+            videos.append({"id": video.id, "title": video.title})
         return videos
 
 
@@ -62,18 +64,26 @@ async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
     start, end = range.replace("bytes=", "").split("-")
     start = int(start)
     end = int(end) if end else start + CHUNK_SIZE
-    filesize = (await get_movie_information_by_id(id_))["size"]
+    movie_info = await get_movie_information_by_id(id_)
+    filesize = movie_info["size"]
     headers = {
         'Content-Range': f'bytes {str(start)}-{str(int(min(end, int(filesize))))}/{filesize}',
         'Accept-Ranges': 'bytes'
     }
+
+    if id_ in VIDEO_CACHE and f"{start},{end}" in VIDEO_CACHE[id_]:
+        return Response(VIDEO_CACHE[id_][f"{start},{end}"].get_bytes(), status_code=206, headers=headers,
+                        media_type="video/mp4")
+
     totalChunks = b''
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = server_pb2_grpc.CdnServerStub(channel)
         response_iterator = stub.StreamVideo(server_pb2.VideoRequest(videoId=id_))
         for response in response_iterator:
             totalChunks += response.chunk
-    return Response(totalChunks[start:end + 1], status_code=206, headers=headers, media_type="video/mp4")
+    VIDEO_CACHE[id_] = {f"{start},{end}": Video(id_, movie_info["title"], start, end, totalChunks[start:end + 1])}
+    return Response(VIDEO_CACHE[id_][f"{start},{end}"].get_bytes(), status_code=206, headers=headers,
+                    media_type="video/mp4")
 
 
 def create_upload_iterator(filename: str):
