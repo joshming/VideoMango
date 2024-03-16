@@ -6,6 +6,7 @@ import grpc
 from fastapi import FastAPI, Response, Header
 from fastapi.middleware.cors import CORSMiddleware
 
+from clientpackage import cacheservice
 from clientpackage.video import Video
 from proto import server_pb2_grpc, server_pb2
 
@@ -26,7 +27,7 @@ app.add_middleware(
 CHUNK_SIZE = 1024 * 1024
 VIDEO_EXTENSION = ".mp4"
 
-VIDEO_CACHE = {}
+cache_service = cacheservice.CacheService(60000)
 
 
 @app.get("/movies")
@@ -70,9 +71,9 @@ async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
         'Content-Range': f'bytes {str(start)}-{str(int(min(end, int(filesize))))}/{filesize}',
         'Accept-Ranges': 'bytes'
     }
-
-    if id_ in VIDEO_CACHE and f"{start},{end}" in VIDEO_CACHE[id_]:
-        return Response(VIDEO_CACHE[id_][f"{start},{end}"].get_bytes(), status_code=206, headers=headers,
+    totalChunks = cache_service.get_video(id_, start, end)
+    if totalChunks:
+        return Response(totalChunks, status_code=206, headers=headers,
                         media_type="video/mp4")
 
     totalChunks = b''
@@ -81,9 +82,10 @@ async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
         response_iterator = stub.StreamVideo(server_pb2.VideoRequest(videoId=id_))
         for response in response_iterator:
             totalChunks += response.chunk
-    VIDEO_CACHE[id_] = {f"{start},{end}": Video(id_, movie_info["title"], start, end, totalChunks[start:end + 1])}
-    return Response(VIDEO_CACHE[id_][f"{start},{end}"].get_bytes(), status_code=206, headers=headers,
-                    media_type="video/mp4")
+
+    video = Video(id_, movie_info["title"], start, end, totalChunks[start:end + 1])
+    cache_service.set_video(video)
+    return Response(video.get_bytes(), status_code=206, headers=headers, media_type="video/mp4")
 
 
 def create_upload_iterator(filename: str):
