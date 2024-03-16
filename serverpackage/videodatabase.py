@@ -92,7 +92,7 @@ class VideoDatabase:
         :return: the rows represented as a list of tuples of any types
         """
         conn, cursor = create_connection()
-        sql = f"select id, file from videos"
+        sql = f"select id, title, file from videos"
         cursor.execute(sql)
         result = cursor.fetchall()
         conn.commit()
@@ -102,7 +102,7 @@ class VideoDatabase:
 
     def get_video_information(self, id: int) -> Tuple[Any]:
         conn, cursor = create_connection()
-        sql = f"select id, file, size from videos where id={id}"
+        sql = f"select id, title, size from videos where id={id}"
         cursor.execute(sql)
         result = cursor.fetchone()
         conn.commit()

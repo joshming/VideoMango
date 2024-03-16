@@ -1,6 +1,6 @@
 # MeerkatVideo
 
-A video streaming platform to allow you and your friends watch movies together 
+A video streaming platform to allow you and your friends watch movies together
 
 ## Tech
 - Python 3.9+
@@ -10,6 +10,12 @@ A video streaming platform to allow you and your friends watch movies together
 - NextJS
 
 ## Run instructions
+
+To upload a video, have the video in the root directory then run the curl (replacing the information)
+```{shell}
+curl --location --request POST 'http://127.0.0.1:8000/upload?title=Meerkat%20Facts&filename=meerkat-facts'
+```
+
 To start the backend server
 ```{shell}
 python startserver.py

@@ -1,13 +1,11 @@
 import os
 from typing import Dict
 
-import google
 import grpc
 from fastapi import FastAPI, Response, Header
 from fastapi.middleware.cors import CORSMiddleware
 
-from clientpackage import cacheservice
-from clientpackage.video import Video
+from clientpackage import cacheservice, clientservice
 from proto import server_pb2_grpc, server_pb2
 
 app = FastAPI()
@@ -32,21 +30,12 @@ cache_service = cacheservice.CacheService(60000)
 
 @app.get("/movies")
 async def get_all_movies():
-    with grpc.insecure_channel('localhost:50051') as channel:
-        stub = server_pb2_grpc.CdnServerStub(channel)
-        response_iterator = stub.getAllVideos(google.protobuf.empty_pb2.Empty())
-        videos = []
-        for video in response_iterator:
-            videos.append({"id": video.id, "title": video.title})
-        return videos
+    return clientservice.retrieve_all_movies()
 
 
-@app.get("/movie/{id}")
-async def get_movie_information_by_id(id: int) -> Dict:
-    with grpc.insecure_channel('localhost:50051') as channel:
-        stub = server_pb2_grpc.CdnServerStub(channel)
-        response = stub.getVideoInformation(server_pb2.VideoRequest(videoId=id))
-        return {"id": response.id, "title": response.title, "size": response.size}
+@app.get("/movie/{id_}")
+async def get_movie_information_by_id(id_: int) -> Dict:
+    return clientservice.retrieve_movie_information(id_)
 
 
 @app.get("/stream/{id_}")
@@ -71,21 +60,8 @@ async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
         'Content-Range': f'bytes {str(start)}-{str(int(min(end, int(filesize))))}/{filesize}',
         'Accept-Ranges': 'bytes'
     }
-    totalChunks = cache_service.get_video(id_, start, end)
-    if totalChunks:
-        return Response(totalChunks, status_code=206, headers=headers,
-                        media_type="video/mp4")
-
-    totalChunks = b''
-    with grpc.insecure_channel('localhost:50051') as channel:
-        stub = server_pb2_grpc.CdnServerStub(channel)
-        response_iterator = stub.StreamVideo(server_pb2.VideoRequest(videoId=id_))
-        for response in response_iterator:
-            totalChunks += response.chunk
-
-    video = Video(id_, movie_info["title"], start, end, totalChunks[start:end + 1])
-    cache_service.set_video(video)
-    return Response(video.get_bytes(), status_code=206, headers=headers, media_type="video/mp4")
+    video_bytes = clientservice.get_video_bytes_for_stream(id_, start, end)
+    return Response(video_bytes, status_code=206, headers=headers, media_type="video/mp4")
 
 
 def create_upload_iterator(filename: str):
@@ -94,7 +70,6 @@ def create_upload_iterator(filename: str):
         while True:
             chunk = compressed_file.read(CHUNK_SIZE)
             if len(chunk) == 0:
-                os.remove(filename)
                 return
             yield server_pb2.Chunk(chunk=chunk)
 
