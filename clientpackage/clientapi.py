@@ -57,7 +57,7 @@ async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
     movie_info = await get_movie_information_by_id(id_)
     filesize = movie_info["size"]
     headers = {
-        'Content-Range': f'bytes {str(start)}-{str(int(min(end, int(filesize))))}/{filesize}',
+        'Content-Range': f'bytes {str(start)}-{str(int(min(end, int(filesize) - 1)))}/{filesize}',
         'Accept-Ranges': 'bytes'
     }
     video_bytes = clientservice.get_video_bytes_for_stream(id_, start, end)

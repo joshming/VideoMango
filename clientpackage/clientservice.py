@@ -8,7 +8,6 @@ from clientpackage import cacheservice
 from clientpackage.video import Video
 from proto import server_pb2_grpc, server_pb2
 
-CHUNK_SIZE = 1024 * 1024
 VIDEO_EXTENSION = ".mp4"
 
 cache_service = cacheservice.CacheService(60000)
@@ -44,6 +43,7 @@ def get_video_bytes_for_stream(id_: int, start: int, end: int) -> bytes:
     :param end: end of the byte sequence
     :return: a video bytes
     """
+    print(start, end)
     totalChunks = cache_service.get_video(id_, start, end)
     if totalChunks:
         return totalChunks
