@@ -1,3 +1,4 @@
+import sys
 import time
 
 from concurrent import futures
@@ -67,23 +68,19 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
                 f.write(chunk.chunk)
 
 
-def serve() -> server:
+def serve(port: str) -> server:
     _server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     server_pb2_grpc.add_CdnServerServicer_to_server(CdnServerServicer(), _server)
-    _server.add_insecure_port('[::]:50051')
+    _server.add_insecure_port(f'[::]:{port}')
     return _server
 
 
-def main():
+def main(port: str):
     print(f"Starting CDN at {datetime.now()}")
-    _server = serve()
+    _server = serve(port)
     _server.start()
     try:
         while True:
             time.sleep(60 * 60 * 24)
     except KeyboardInterrupt:
         _server.stop(0)
-
-
-if __name__ == '__main__':
-    main()

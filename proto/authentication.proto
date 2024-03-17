@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package authentication;
+
+service Authentication {
+  rpc create_account(AccountRequest) returns (AccountResponse);
+  rpc login(AccountRequest) returns (AccountResponse);
+}
+
+message AccountRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message AccountResponse {
+    bool can_log_in = 1;
+    int32 userId = 2;
+    string message = 3;
+}

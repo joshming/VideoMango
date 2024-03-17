@@ -4,6 +4,7 @@ from typing import Dict
 import grpc
 from fastapi import FastAPI, Response, Header
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from clientpackage import cacheservice, clientservice
 from proto import server_pb2_grpc, server_pb2
@@ -85,3 +86,30 @@ async def upload_movie(title: str, filename: str):
         stub.UploadVideo(request_iterator)
 
     return response.ack
+
+
+class User(BaseModel):
+    username: str
+    password: str
+
+
+@app.post("/user/create")
+async def create_account(user: User):
+    username = user.username
+    password = user.password
+
+    created = clientservice.create_user(username, password)
+    if created.can_log_in:
+        return True
+    return Response(created.message, status_code=400)
+
+
+@app.post("/user/login")
+async def login(user: User):
+    username = user.username
+    password = user.password
+
+    created = clientservice.login(username, password)
+    if created.can_log_in:
+        return True
+    return Response(created.message, status_code=400)
