@@ -23,7 +23,12 @@ python startserver.py
 
 To start the frontend, assuming in root directory `VideoMango`
 ```{shell}
-cd ./frontend/meerkat-video; npm run dev
+cd ./frontend/meerkat-video; npm install; npm run dev
+```
+
+To install python dependencies
+```{shell}
+pip install -r requirements.txt
 ```
 
 to start the REST API
