@@ -13,16 +13,16 @@ export default function Login() {
         event.preventDefault();
         try {
             const formData = new FormData(event.currentTarget);
-            let requestBody : {} = {};
-            // @ts-ignore
-            formData.forEach((value, key) => requestBody[key] = value);
-
-            const response = await fetch('http://localhost:8000/user/login', {
+            const username = formData.get("username");
+            const password = formData.get("password");
+            const authJson = JSON.stringify({username, password})
+            const response = await fetch('/api/auth/', {
                 method: 'POST',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody)
+                body: authJson
             });
 
             if (!response.ok) {
@@ -32,6 +32,7 @@ export default function Login() {
                 setError(data["message"])
                 return;
             }
+
             router.push('/watch');
         } catch (error) {
             setIsSuccess(false);

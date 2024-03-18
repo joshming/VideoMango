@@ -13,26 +13,24 @@ export default function SignUp() {
         event.preventDefault();
         try {
             const formData = new FormData(event.currentTarget);
-            let requestBody: {} = {};
-            // @ts-ignore
-            formData.forEach((value, key) => requestBody[key] = value);
+            const email = formData.get("username");
+            const password = formData.get("password");
+            const confirm = formData.get("confirm");
 
-            // @ts-ignore
-            if (requestBody["confirm"] !== requestBody["password"]) {
-                setError("Passwords Do not match")
+            if (confirm !== password) {
                 setIsSuccess(false);
-                return
+                setError("Passwords don't match");
+                return;
             }
 
-            // @ts-ignore
-            delete requestBody.confirm;
+            const authJson = JSON.stringify({email, password})
 
             const response = await fetch('http://localhost:8000/user/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody)
+                body: authJson
             });
 
             if (!response.ok) {
