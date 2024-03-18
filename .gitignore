@@ -1,5 +1,6 @@
 .idea/
 videoDatabase.db
+userDatabase.db
 videos/*
 !videos/.keep
 **/__pycache__/

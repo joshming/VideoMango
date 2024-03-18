@@ -1,5 +1,7 @@
 import NavBar from "./_components/NavBar"
 import Image from 'next/image'
+import Video from "@/app/_components/VideoComponent"
+import Link from "next/link"
 
 export default function Home() {
   return (
@@ -25,6 +27,8 @@ export default function Home() {
             </div>
           </div>
           <div className="purplebox">
+             <Link href={`/login`}> Login </Link>
+             <Link href={`/signup`}> Sign Up </Link>
             <h2>Code Highlights</h2>
             <h3>--- add important code details ---</h3>
           </div>
