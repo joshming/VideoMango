@@ -1,8 +1,10 @@
 import os
-from typing import Dict
+from typing import Dict, Any
 
 import grpc
 from fastapi import FastAPI, Response, Header
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -93,15 +95,21 @@ class User(BaseModel):
     password: str
 
 
+class UserResponse(BaseModel):
+    user: str
+    token: int
+
+
 @app.post("/user/create")
 async def create_account(user: User):
     username = user.username
     password = user.password
 
     created = clientservice.create_user(username, password)
+    user_id = created.userId
     if created.can_log_in:
-        return True
-    return Response(created.message, status_code=400)
+        return JSONResponse(jsonable_encoder(UserResponse(user=username, token=user_id)))
+    return JSONResponse(jsonable_encoder(UserResponse(user=username, token=user_id)), status_code=400)
 
 
 @app.post("/user/login")
@@ -110,6 +118,20 @@ async def login(user: User):
     password = user.password
 
     created = clientservice.login(username, password)
+    user_id = created.userId
+
     if created.can_log_in:
-        return True
-    return Response(created.message, status_code=400)
+        return JSONResponse(jsonable_encoder(UserResponse(user=username, token=user_id)), status_code=200)
+    return JSONResponse(jsonable_encoder(UserResponse(user="", token=-1)), status_code=400)
+
+
+class ValidationResponse(BaseModel):
+    is_validated: bool
+
+
+@app.get("/user/authenticated")
+async def check_authentication(token: int, username: str):
+    authentication_response = clientservice.is_authenticated(token, username)
+    if authentication_response:
+        return JSONResponse(jsonable_encoder(ValidationResponse(is_validated=True)))
+    return JSONResponse(jsonable_encoder(ValidationResponse(is_validated=False)), status_code=401)

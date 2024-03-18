@@ -24,6 +24,11 @@ class AuthenticationStub(object):
                 request_serializer=proto_dot_authentication__pb2.AccountRequest.SerializeToString,
                 response_deserializer=proto_dot_authentication__pb2.AccountResponse.FromString,
                 )
+        self.is_authenticated = channel.unary_unary(
+                '/authentication.Authentication/is_authenticated',
+                request_serializer=proto_dot_authentication__pb2.AuthenticationRequest.SerializeToString,
+                response_deserializer=proto_dot_authentication__pb2.AuthenticationResponse.FromString,
+                )
 
 
 class AuthenticationServicer(object):
@@ -41,6 +46,12 @@ class AuthenticationServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def is_authenticated(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthenticationServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_AuthenticationServicer_to_server(servicer, server):
                     servicer.login,
                     request_deserializer=proto_dot_authentication__pb2.AccountRequest.FromString,
                     response_serializer=proto_dot_authentication__pb2.AccountResponse.SerializeToString,
+            ),
+            'is_authenticated': grpc.unary_unary_rpc_method_handler(
+                    servicer.is_authenticated,
+                    request_deserializer=proto_dot_authentication__pb2.AuthenticationRequest.FromString,
+                    response_serializer=proto_dot_authentication__pb2.AuthenticationResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class Authentication(object):
         return grpc.experimental.unary_unary(request, target, '/authentication.Authentication/login',
             proto_dot_authentication__pb2.AccountRequest.SerializeToString,
             proto_dot_authentication__pb2.AccountResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def is_authenticated(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/authentication.Authentication/is_authenticated',
+            proto_dot_authentication__pb2.AuthenticationRequest.SerializeToString,
+            proto_dot_authentication__pb2.AuthenticationResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

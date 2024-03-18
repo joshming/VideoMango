@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aproto/authentication.proto\x12\x0e\x61uthentication\"4\n\x0e\x41\x63\x63ountRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"F\n\x0f\x41\x63\x63ountResponse\x12\x12\n\ncan_log_in\x18\x01 \x01(\x08\x12\x0e\n\x06userId\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t2\xad\x01\n\x0e\x41uthentication\x12Q\n\x0e\x63reate_account\x12\x1e.authentication.AccountRequest\x1a\x1f.authentication.AccountResponse\x12H\n\x05login\x12\x1e.authentication.AccountRequest\x1a\x1f.authentication.AccountResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aproto/authentication.proto\x12\x0e\x61uthentication\"4\n\x0e\x41\x63\x63ountRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"F\n\x0f\x41\x63\x63ountResponse\x12\x12\n\ncan_log_in\x18\x01 \x01(\x08\x12\x0e\n\x06userId\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"8\n\x15\x41uthenticationRequest\x12\r\n\x05token\x18\x01 \x01(\x05\x12\x10\n\x08username\x18\x02 \x01(\t\",\n\x16\x41uthenticationResponse\x12\x12\n\ncan_log_in\x18\x01 \x01(\x08\x32\x90\x02\n\x0e\x41uthentication\x12Q\n\x0e\x63reate_account\x12\x1e.authentication.AccountRequest\x1a\x1f.authentication.AccountResponse\x12H\n\x05login\x12\x1e.authentication.AccountRequest\x1a\x1f.authentication.AccountResponse\x12\x61\n\x10is_authenticated\x12%.authentication.AuthenticationRequest\x1a&.authentication.AuthenticationResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -25,6 +25,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_ACCOUNTREQUEST']._serialized_end=98
   _globals['_ACCOUNTRESPONSE']._serialized_start=100
   _globals['_ACCOUNTRESPONSE']._serialized_end=170
-  _globals['_AUTHENTICATION']._serialized_start=173
-  _globals['_AUTHENTICATION']._serialized_end=346
+  _globals['_AUTHENTICATIONREQUEST']._serialized_start=172
+  _globals['_AUTHENTICATIONREQUEST']._serialized_end=228
+  _globals['_AUTHENTICATIONRESPONSE']._serialized_start=230
+  _globals['_AUTHENTICATIONRESPONSE']._serialized_end=274
+  _globals['_AUTHENTICATION']._serialized_start=277
+  _globals['_AUTHENTICATION']._serialized_end=549
 # @@protoc_insertion_point(module_scope)

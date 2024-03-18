@@ -1,21 +1,10 @@
-import Link from "next/link";
+ import Link from "next/link";
+import {Movie} from "@/app/watch/page";
 
-type Movie = {
-    id: number
-    title: string
-}
+export default function MovieList( {movies} : { movies: Movie[]}) {
 
-async function getMovies(): Promise<Movie[]> {
-   const response = await fetch("http://localhost:8000/movies");
-   if (!response.ok) {
-     throw new Error("Bad")
-   }
-   return response.json();
-}
-
-export default async function MovieList() {
-    const movies= await getMovies();
-    const movieButtons = movies.map((movie) => <Link href={`/watch/${movie.id}`}>
+    const movieButtons = movies.map(movie =>
+        <Link href={`/watch/${movie.id}`}>
             <button
                 className="moviebutton"
                 key={movie.id}
@@ -23,7 +12,6 @@ export default async function MovieList() {
             </button>
         </Link>
     );
-    // const movieButtons = null;
     return (
       <div className="purplebox blockdisplay">
         <div>
