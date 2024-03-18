@@ -1,32 +1,7 @@
-'use client';
-
-import Cookies from 'js-cookie'
-import {useEffect} from 'react'
-import {useRouter} from 'next/navigation'
-import Link from "next/link";
+ import Link from "next/link";
 import {Movie} from "@/app/watch/page";
 
 export default function MovieList( {movies} : { movies: Movie[]}) {
-    const router = useRouter();
-
-    // useEffect(() => {
-    //     const token = Cookies.get('token');
-    //     const user = Cookies.get('user');
-    //     if (!token || !user) {
-    //         router.replace('/');
-    //         return;
-    //     }
-    //
-    //     const validateToken = async () => {
-    //         const res = await fetch(`/api/auth?username=${user}&token=${token}`);
-    //
-    //         if (!res.ok) {
-    //             router.replace('/');
-    //         }
-    //     }
-    //
-    //     validateToken()
-    // }, [router])
 
     const movieButtons = movies.map(movie =>
         <Link href={`/watch/${movie.id}`}>
