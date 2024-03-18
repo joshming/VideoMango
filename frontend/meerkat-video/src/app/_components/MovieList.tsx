@@ -6,21 +6,22 @@ export default function MovieList( {movies} : { movies: Movie[]}) {
     const movieButtons = movies.map(movie =>
         <Link href={`/watch/${movie.id}`}>
             <button
-                className={`bg-amber-200 w-24 p-2 rounded-md border-2 border-amber-200 hover:bg-transparent mr-5`}
+                className="moviebutton"
                 key={movie.id}
                 id={`${movie.id}`}>{`${movie.title}`}
             </button>
         </Link>
     );
-
     return (
-        <div className={`h-full flex flex-col justify-center text-center`}>
-            <h1>What would you like to watch?</h1>
-            <div className={`m-20 flex justify-center text-center`}>
-                {
-                    movieButtons && movieButtons.map(e => e)
-                }
-            </div>
+      <div className="purplebox blockdisplay">
+        <div>
+          <h2>What would you like to watch?</h2>
+          <div>
+              {
+                movieButtons && movieButtons.map(e => e)
+              } 
+          </div>
         </div>
+      </div>
     );
 }
