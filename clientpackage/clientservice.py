@@ -84,3 +84,9 @@ def login(username: str, password: str):
     with grpc.insecure_channel('localhost:' + AUTHENTICATION_PORT) as channel:
         stub = authentication_pb2_grpc.AuthenticationStub(channel)
         return stub.login(authentication_pb2.AccountRequest(username=username, password=password))
+
+
+def is_authenticated(token: int, username: str) -> bool:
+    with grpc.insecure_channel('localhost:' + AUTHENTICATION_PORT) as channel:
+        stub = authentication_pb2_grpc.AuthenticationStub(channel)
+        return stub.is_authenticated(authentication_pb2.AuthenticationRequest(token=token, username=username)).can_log_in

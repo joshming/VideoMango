@@ -5,6 +5,7 @@ package authentication;
 service Authentication {
   rpc create_account(AccountRequest) returns (AccountResponse);
   rpc login(AccountRequest) returns (AccountResponse);
+  rpc is_authenticated(AuthenticationRequest) returns (AuthenticationResponse);
 }
 
 message AccountRequest {
@@ -16,4 +17,13 @@ message AccountResponse {
     bool can_log_in = 1;
     int32 userId = 2;
     string message = 3;
+}
+
+message AuthenticationRequest {
+    int32 token = 1;
+    string username = 2;
+}
+
+message AuthenticationResponse {
+    bool can_log_in = 1;
 }

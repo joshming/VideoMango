@@ -1,5 +1,4 @@
 export default function Video({ videoId }: { videoId: number }) {
-    console.log(videoId);
     return (
         <div className='vid'>
             <video width="1200" height="900" controls>
