@@ -1,11 +1,10 @@
-import os
-from typing import Dict, Any
+from typing import Dict
 
 import grpc
 from fastapi import FastAPI, Response, Header
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from clientpackage import cacheservice, clientservice

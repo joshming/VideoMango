@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+
+package comment;
+
+service CommentServer {
+    rpc get_comments(Video) returns (stream CommentResponse);
+    rpc send_message(SendComment) returns (google.protobuf.Empty);
+}
+
+message SendComment {
+    int32 video_id = 1;
+    Comment comment = 2;
+}
+
+message Video {
+    int32 video_id = 1;
+}
+
+message Comment {
+    string user = 1;
+    string message = 2;
+}
+
+message CommentResponse {
+    string user = 1;
+    string message = 2;
+    string time = 3;
+}

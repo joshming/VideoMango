@@ -1,5 +1,6 @@
 import Video from "@/app/_components/VideoComponent";
 import NavBar from "@/app/_components/NavBar";
+import Comment from "@/app/_components/Comment";
 
 type Movie = {
     id: number
@@ -18,7 +19,6 @@ export default async function VideoPlayer({ params }: {
     params: { id: number }
 }) {
     const movieInformation : Movie = await getMovieInformation(params.id);
-
     return (
         <div>
             <NavBar />
@@ -28,11 +28,16 @@ export default async function VideoPlayer({ params }: {
                     <h1>Now playing: {movieInformation.title}</h1>
                 </div>
                 <div className="purplebox">
-                    {/* <h1 className={`m-10`}>Let's watch that movie {movieInformation.title}</h1> */}
                     <Video videoId={params.id}/>
                 </div>
             </div>
             <div className="borderright"/>
+            <div className="flex justify-center">
+                <div className={`flex flex-col bg-off-white rounded-md w-4/5 p-5`}>
+                    <h2>Comments</h2>
+                    <Comment id={params.id}/>
+                </div>
+            </div>
         </div>
     );
 }
