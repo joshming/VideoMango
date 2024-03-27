@@ -3,7 +3,7 @@ import sqlite3
 from sqlite3 import Connection, Cursor
 from typing import Tuple, Any, Union
 
-LOCATION = "userDatabase.db"
+LOCATION = "videoDatabase.db"
 TABLE = "users"
 
 
