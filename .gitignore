@@ -1,5 +1,5 @@
 .idea/
-videoDatabase.db
+videoDatabase*.db
 userDatabase.db
 videos/*
 !videos/.keep

@@ -1,10 +1,14 @@
+import signal
 import sys
+import threading
 import time
 
 from concurrent import futures
 from datetime import datetime
 from pathlib import Path
+from typing import List
 
+import google
 import grpc
 from grpc import server
 
@@ -15,6 +19,21 @@ CHUNK_SIZE = 1024 * 1024
 VIDEO_PATH = "./videos/"
 VIDEO_EXTENSION = ".mp4"
 
+OTHER_SERVER_PORTS = ["50051", "50052", "50053"]
+
+
+def get_titles(port: str) -> List[server_pb2.Title]:
+    try:
+        with grpc.insecure_channel('localhost:' + port) as channel:
+            stub = server_pb2_grpc.CdnServerStub(channel)
+            titles_iterator = stub.get_new_titles(google.protobuf.empty_pb2.Empty())
+            if not titles_iterator:
+                return []
+            titles = [title for title in titles_iterator]
+            return titles
+    except grpc.RpcError:
+        return []
+
 
 class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     """
@@ -23,8 +42,17 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     _videoDatabase: VideoDatabase
     """
 
-    def __init__(self):
-        self.video_database = VideoDatabase()
+    def __init__(self, port: str):
+        self.different_ports = OTHER_SERVER_PORTS
+        self.different_ports.remove(port)
+        self.video_database = VideoDatabase(port)
+        signal.signal(signal.SIGTERM, self.close_thread)
+        self.replication_continue = True
+        self.replication_thread = threading.Thread(target=self.replicate, daemon=True)
+        self.replication_thread.start()
+
+    def close_thread(self):
+        self.replication_continue = False
 
     def getAllVideos(self, request, context):
         result = self.video_database.get_all_videos()
@@ -66,11 +94,52 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
         with open(VIDEO_PATH + filename, 'wb') as f:
             for chunk in chunks:
                 f.write(chunk.chunk)
+        print(f"uploaded {filename}")
+
+    def get_video(self, request, context):
+        title = request.title
+        video = self.video_database.fetch_by_title(title)
+        location = VIDEO_PATH + video[0] + VIDEO_EXTENSION
+        print("sending video with location " + location)
+        with open(location, 'rb') as file:
+            while True:
+                chunk = file.read(CHUNK_SIZE)
+                if len(chunk) == 0:
+                    return
+                yield server_pb2.Chunk(chunk=chunk)
+
+    def get_new_titles(self, request, context):
+        videos = self.video_database.get_recently_added()
+        for title, size in videos:
+            yield server_pb2.Title(title=title, size=size)
+
+    def retrieve_video(self, port: str, title: str, size: int) -> None:
+        if self.video_database.checkTitle(title):
+            return
+        self.video_database.upload(title, title + VIDEO_EXTENSION, size)
+        print("retrieving the video " + title)
+        with grpc.insecure_channel('localhost:' + port) as channel:
+            stub = server_pb2_grpc.CdnServerStub(channel)
+            video_chunks = stub.get_video(server_pb2.Title(title=title))
+            self._save(video_chunks, title + VIDEO_EXTENSION)
+
+    def replicate(self) -> None:
+        try:
+            while self.replication_continue:
+                for port in self.different_ports:
+                    titles = get_titles(port)
+                    for video in titles:
+                        title = video.title
+                        size = video.size
+                        self.retrieve_video(port, title, size)
+                time.sleep(10)
+        except KeyboardInterrupt:
+            return
 
 
 def serve(port: str) -> server:
     _server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    server_pb2_grpc.add_CdnServerServicer_to_server(CdnServerServicer(), _server)
+    server_pb2_grpc.add_CdnServerServicer_to_server(CdnServerServicer(port), _server)
     _server.add_insecure_port(f'[::]:{port}')
     return _server
 
