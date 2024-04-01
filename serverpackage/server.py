@@ -20,6 +20,7 @@ VIDEO_PATH = "./videos/"
 VIDEO_EXTENSION = ".mp4"
 
 OTHER_SERVER_PORTS = ["50051", "50052", "50053"]
+REPLICATION_INTERVAL = 300
 
 
 def get_titles(port: str) -> List[server_pb2.Title]:
@@ -132,7 +133,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
                         title = video.title
                         size = video.size
                         self.retrieve_video(port, title, size)
-                time.sleep(10)
+                time.sleep(REPLICATION_INTERVAL)
         except KeyboardInterrupt:
             return
 
