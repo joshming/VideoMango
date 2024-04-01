@@ -12,6 +12,10 @@ type Comments = {
     users: string[]
     messages: message[]
 }
+
+// interval is in milliseconds -- default is 5000ms, change it as you want to
+const FETCH_DATA_INTERVAL = 5000;
+
 export default function Comment({id}: { id: number }) {
 
     const [comments, setComments] = useState<JSX.Element[] | null>(null);
@@ -41,8 +45,9 @@ export default function Comment({id}: { id: number }) {
 
     const postComment = async () => {
         try {
-            console.log("Posting comment");
-            const postBody = {newComment}
+            const pythonSafeString = newComment.replace("'", "`");
+            console.log(pythonSafeString);
+            const postBody = { "message": pythonSafeString}
             const response = await fetch(`http://localhost:3000/api/comments?id=${id}`, {
                 method: 'POST',
                 headers: {
@@ -56,7 +61,7 @@ export default function Comment({id}: { id: number }) {
                 console.log("could not post comment")
                 return;
             }
-
+            setNewComment('');
             setRefresh(true);
         } catch (error) {
             console.error('Error posting comment', error);
@@ -65,7 +70,7 @@ export default function Comment({id}: { id: number }) {
 
     useEffect(() => {
             fetchData();
-            const intervalId = setInterval(fetchData, 20000);
+            const intervalId = setInterval(fetchData, FETCH_DATA_INTERVAL);
             return () => clearInterval(intervalId);
         }, []
     );
@@ -80,6 +85,7 @@ export default function Comment({id}: { id: number }) {
             <div className={'grid grid-cols-12 bg-opacity-50 bg-amber-200 rounded-2xl p-5 w-full'}>
                 <input className={'col-span-11 rounded-xl p-3 focus:border-0'}
                        placeholder="New Comment"
+                       value={newComment}
                        onChange={e => setNewComment(e.currentTarget.value)}
                 >
                 </input>

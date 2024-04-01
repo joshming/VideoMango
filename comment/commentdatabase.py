@@ -4,10 +4,10 @@ import sqlite3
 from sqlite3 import Connection, Cursor
 from typing import Tuple, Any, Union
 
-from chat.Comment import Comment, Message
+from comment.Comment import Comment, Message
 
 LOCATION = "videoDatabase.db"
-TABLE = "chats"
+TABLE = "comments"
 
 
 def create_connection() -> tuple[Connection, Cursor]:
@@ -26,7 +26,7 @@ def createTable() -> None:
     :return: None
     """
     sql = 'create table if not exists ' + TABLE + ('(id INTEGER PRIMARY KEY AUTOINCREMENT, video_id INTEGER, '
-                                                   'chat TEXT, FOREIGN KEY(video_id) REFERENCES videos(id))')
+                                                   'comment TEXT, FOREIGN KEY(video_id) REFERENCES videos(id))')
     conn = sqlite3.connect(LOCATION)
     cursor = conn.cursor()
     cursor.execute(sql)
@@ -37,7 +37,7 @@ def createTable() -> None:
 def get_messages(video_id: int) -> Union[Comment, None]:
     conn = sqlite3.connect(LOCATION)
     cursor = conn.cursor()
-    sql = f'select chat from {TABLE} where video_id={video_id}'
+    sql = f'select comment from {TABLE} where video_id={video_id}'
     cursor.execute(sql)
     result = cursor.fetchone()
     conn.commit()
@@ -53,7 +53,7 @@ def get_messages(video_id: int) -> Union[Comment, None]:
 
 def add_message(video_id: int, message: Message) -> bool:
     """
-    Adds a new message to the chat for <video_id> from user <user>
+    Adds a new message to the comments for <video_id> from user <user>
     :param video_id:
     :param user:
     :param message:
@@ -64,10 +64,10 @@ def add_message(video_id: int, message: Message) -> bool:
     comment = get_messages(video_id)
     if comment:
         comment.messages.append(message)
-        sql = f'update {TABLE} set chat=\"{str(comment.to_dictionary())}\" where video_id={video_id}'
+        sql = f'update {TABLE} set comment=\"{str(comment.to_dictionary())}\" where video_id={video_id}'
     else:
         comment = Comment([message.user], [message], video_id)
-        sql = f'insert into {TABLE} (video_id, chat) values ({video_id}, \"{str(comment.to_dictionary())}\")'
+        sql = f'insert into {TABLE} (video_id, comment) values ({video_id}, \"{str(comment.to_dictionary())}\")'
     cursor.execute(sql)
     conn.commit()
     conn.close()

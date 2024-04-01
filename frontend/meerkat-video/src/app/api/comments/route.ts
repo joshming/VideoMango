@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     const id = searchParams.get("id")
     const body = await req.json();
     const user = req.cookies.get("user")?.value;
-    const message = body.newComment;
+    const message = body.message;
     if (user === null) {
         return NextResponse.redirect("/login");
     }

@@ -1,6 +1,6 @@
 import grpc
 
-from chat.Comment import Comment, Message
+from comment.Comment import Comment, Message
 from proto import commentserver_pb2_grpc, commentserver_pb2
 
 CHAT_PORT = "50070"

@@ -1,6 +1,6 @@
 import sys
 
-from chat import chatserver
+from comment import commentserver
 
 if __name__ == '__main__':
-    chatserver.main(sys.argv[1])
+    commentserver.main(sys.argv[1])

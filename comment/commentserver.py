@@ -5,26 +5,26 @@ from datetime import datetime
 import google
 import grpc
 
-from chat import chatdatabase
-from chat.Comment import Message
+from comment import commentdatabase
+from comment.Comment import Message
 from proto import commentserver_pb2_grpc, commentserver_pb2
 
 
 class CommentServerServicer(commentserver_pb2_grpc.CommentServerServicer):
 
     def __init__(self):
-        chatdatabase.createTable()
+        commentdatabase.createTable()
 
     def send_message(self, request, context):
         video_id = request.video_id
         user = request.comment.user
         message = request.comment.message
-        chatdatabase.add_message(video_id, Message(user, message, time.time_ns()))
+        commentdatabase.add_message(video_id, Message(user, message, time.time_ns()))
         return google.protobuf.empty_pb2.Empty()
 
     def get_comments(self, request, context):
         video_id = request.video_id
-        comments = chatdatabase.get_messages(video_id)
+        comments = commentdatabase.get_messages(video_id)
         if not comments:
             yield commentserver_pb2.CommentResponse(user="", message="", time="")
             return
