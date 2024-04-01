@@ -15,25 +15,27 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12proto/server.proto\x12\x06server\x1a\x1bgoogle/protobuf/empty.proto\"\x1f\n\x0cVideoRequest\x12\x0f\n\x07videoId\x18\x01 \x01(\x05\"\x16\n\x05\x43hunk\x12\r\n\x05\x63hunk\x18\x01 \x01(\x0c\"-\n\rUploadRequest\x12\x1c\n\x05\x63hunk\x18\x01 \x01(\x0b\x32\r.server.Chunk\"\x1d\n\x0eUploadResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\t\"8\n\x15UploadToServerRequest\x12\r\n\x05title\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\"4\n\tVideoInfo\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x32\xc0\x02\n\tCdnServer\x12;\n\x0cgetAllVideos\x12\x16.google.protobuf.Empty\x1a\x11.server.VideoInfo0\x01\x12>\n\x13getVideoInformation\x12\x14.server.VideoRequest\x1a\x11.server.VideoInfo\x12\x34\n\x0bStreamVideo\x12\x14.server.VideoRequest\x1a\r.server.Chunk0\x01\x12\x36\n\x0bUploadVideo\x12\r.server.Chunk\x1a\x16.server.UploadResponse(\x01\x12H\n\x0fRequestToUpload\x12\x1d.server.UploadToServerRequest\x1a\x16.server.UploadResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12proto/server.proto\x12\x06server\x1a\x1bgoogle/protobuf/empty.proto\"$\n\x05Title\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x03\"\x1f\n\x0cVideoRequest\x12\x0f\n\x07videoId\x18\x01 \x01(\x05\"\x16\n\x05\x43hunk\x12\r\n\x05\x63hunk\x18\x01 \x01(\x0c\"-\n\rUploadRequest\x12\x1c\n\x05\x63hunk\x18\x01 \x01(\x0b\x32\r.server.Chunk\"\x1d\n\x0eUploadResponse\x12\x0b\n\x03\x61\x63k\x18\x01 \x01(\t\"8\n\x15UploadToServerRequest\x12\r\n\x05title\x18\x01 \x01(\t\x12\x10\n\x08\x66ilename\x18\x02 \x01(\t\"4\n\tVideoInfo\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x32\xa8\x03\n\tCdnServer\x12;\n\x0cgetAllVideos\x12\x16.google.protobuf.Empty\x1a\x11.server.VideoInfo0\x01\x12>\n\x13getVideoInformation\x12\x14.server.VideoRequest\x1a\x11.server.VideoInfo\x12\x34\n\x0bStreamVideo\x12\x14.server.VideoRequest\x1a\r.server.Chunk0\x01\x12\x36\n\x0bUploadVideo\x12\r.server.Chunk\x1a\x16.server.UploadResponse(\x01\x12H\n\x0fRequestToUpload\x12\x1d.server.UploadToServerRequest\x1a\x16.server.UploadResponse\x12\x39\n\x0eget_new_titles\x12\x16.google.protobuf.Empty\x1a\r.server.Title0\x01\x12+\n\tget_video\x12\r.server.Title\x1a\r.server.Chunk0\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.server_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_VIDEOREQUEST']._serialized_start=59
-  _globals['_VIDEOREQUEST']._serialized_end=90
-  _globals['_CHUNK']._serialized_start=92
-  _globals['_CHUNK']._serialized_end=114
-  _globals['_UPLOADREQUEST']._serialized_start=116
-  _globals['_UPLOADREQUEST']._serialized_end=161
-  _globals['_UPLOADRESPONSE']._serialized_start=163
-  _globals['_UPLOADRESPONSE']._serialized_end=192
-  _globals['_UPLOADTOSERVERREQUEST']._serialized_start=194
-  _globals['_UPLOADTOSERVERREQUEST']._serialized_end=250
-  _globals['_VIDEOINFO']._serialized_start=252
-  _globals['_VIDEOINFO']._serialized_end=304
-  _globals['_CDNSERVER']._serialized_start=307
-  _globals['_CDNSERVER']._serialized_end=627
+  _globals['_TITLE']._serialized_start=59
+  _globals['_TITLE']._serialized_end=95
+  _globals['_VIDEOREQUEST']._serialized_start=97
+  _globals['_VIDEOREQUEST']._serialized_end=128
+  _globals['_CHUNK']._serialized_start=130
+  _globals['_CHUNK']._serialized_end=152
+  _globals['_UPLOADREQUEST']._serialized_start=154
+  _globals['_UPLOADREQUEST']._serialized_end=199
+  _globals['_UPLOADRESPONSE']._serialized_start=201
+  _globals['_UPLOADRESPONSE']._serialized_end=230
+  _globals['_UPLOADTOSERVERREQUEST']._serialized_start=232
+  _globals['_UPLOADTOSERVERREQUEST']._serialized_end=288
+  _globals['_VIDEOINFO']._serialized_start=290
+  _globals['_VIDEOINFO']._serialized_end=342
+  _globals['_CDNSERVER']._serialized_start=345
+  _globals['_CDNSERVER']._serialized_end=769
 # @@protoc_insertion_point(module_scope)

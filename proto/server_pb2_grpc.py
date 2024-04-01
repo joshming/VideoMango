@@ -40,6 +40,16 @@ class CdnServerStub(object):
                 request_serializer=proto_dot_server__pb2.UploadToServerRequest.SerializeToString,
                 response_deserializer=proto_dot_server__pb2.UploadResponse.FromString,
                 )
+        self.get_new_titles = channel.unary_stream(
+                '/server.CdnServer/get_new_titles',
+                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                response_deserializer=proto_dot_server__pb2.Title.FromString,
+                )
+        self.get_video = channel.unary_stream(
+                '/server.CdnServer/get_video',
+                request_serializer=proto_dot_server__pb2.Title.SerializeToString,
+                response_deserializer=proto_dot_server__pb2.Chunk.FromString,
+                )
 
 
 class CdnServerServicer(object):
@@ -75,6 +85,18 @@ class CdnServerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def get_new_titles(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def get_video(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_CdnServerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -102,6 +124,16 @@ def add_CdnServerServicer_to_server(servicer, server):
                     servicer.RequestToUpload,
                     request_deserializer=proto_dot_server__pb2.UploadToServerRequest.FromString,
                     response_serializer=proto_dot_server__pb2.UploadResponse.SerializeToString,
+            ),
+            'get_new_titles': grpc.unary_stream_rpc_method_handler(
+                    servicer.get_new_titles,
+                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                    response_serializer=proto_dot_server__pb2.Title.SerializeToString,
+            ),
+            'get_video': grpc.unary_stream_rpc_method_handler(
+                    servicer.get_video,
+                    request_deserializer=proto_dot_server__pb2.Title.FromString,
+                    response_serializer=proto_dot_server__pb2.Chunk.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -195,5 +227,39 @@ class CdnServer(object):
         return grpc.experimental.unary_unary(request, target, '/server.CdnServer/RequestToUpload',
             proto_dot_server__pb2.UploadToServerRequest.SerializeToString,
             proto_dot_server__pb2.UploadResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_new_titles(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/server.CdnServer/get_new_titles',
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            proto_dot_server__pb2.Title.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_video(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/server.CdnServer/get_video',
+            proto_dot_server__pb2.Title.SerializeToString,
+            proto_dot_server__pb2.Chunk.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
