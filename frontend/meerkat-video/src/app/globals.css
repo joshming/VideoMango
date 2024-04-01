@@ -6,6 +6,11 @@
   min-height: 100%
 }
 
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
   background: rgb(248,131,121);
   background: linear-gradient(180deg, rgba(248,131,121,1) 15%, rgba(255,252,179,1) 100%);

@@ -36,7 +36,12 @@ To install python dependencies
 pip install -r requirements.txt
 ```
 
-to start the REST API
+to start the client REST API
 ```{shell}
-uvicorn clientpackage.clientapi:app --reload
+uvicorn clientpackage.clientapi:app --host localhost --port 8000 --reload
+```
+
+to start the chat REST API
+```{shell}
+uvicorn clientpackage.commentapi:app --host localhost --port 50000 --reload
 ```
