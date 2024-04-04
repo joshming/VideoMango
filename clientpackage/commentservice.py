@@ -5,7 +5,6 @@ from proto import commentserver_pb2_grpc, commentserver_pb2
 
 CHAT_PORT = "50070"
 
-
 def send_message(video_id: int, user: str, message: str):
     # to make this infinite, maybe the channel cannot be closed,
     with grpc.insecure_channel('localhost:' + CHAT_PORT) as channel:

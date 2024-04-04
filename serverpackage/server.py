@@ -20,7 +20,7 @@ VIDEO_PATH = "./videos/"
 VIDEO_EXTENSION = ".mp4"
 
 OTHER_SERVER_PORTS = ["50051", "50052", "50053"]
-REPLICATION_INTERVAL = 300
+REPLICATION_INTERVAL = 5
 
 
 def get_titles(port: str) -> List[server_pb2.Title]:
@@ -62,6 +62,8 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
 
     def getVideoInformation(self, request, context):
         result = self.video_database.get_video_information(request.videoId)
+        if not result:
+            return server_pb2.VideoInfo(id=-1, title="", size=-1)
         return server_pb2.VideoInfo(id=result[0], title=result[1], size=result[2])
 
     def StreamVideo(self, request, context):
@@ -77,7 +79,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def RequestToUpload(self, request, context):
         title = request.title
         filename = request.filename
-        size = Path(filename + ".mp4").stat().st_size
+        size = Path(filename + VIDEO_EXTENSION).stat().st_size
         if self.video_database.checkTitle(title):
             context.set_code(grpc.StatusCode.ALREADY_EXISTS)
             return server_pb2.UploadResponse(ack="ERROR")
@@ -117,7 +119,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def retrieve_video(self, port: str, title: str, size: int) -> None:
         if self.video_database.checkTitle(title):
             return
-        self.video_database.upload(title, title + VIDEO_EXTENSION, size)
+        self.video_database.upload(title, title, size)
         print("retrieving the video " + title)
         with grpc.insecure_channel('localhost:' + port) as channel:
             stub = server_pb2_grpc.CdnServerStub(channel)
@@ -127,6 +129,7 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
     def replicate(self) -> None:
         try:
             while self.replication_continue:
+                print("replicating...")
                 for port in self.different_ports:
                     titles = get_titles(port)
                     for video in titles:

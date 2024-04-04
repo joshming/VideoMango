@@ -13,18 +13,22 @@ SERVER_PORTS = ('50051', '50052', '50053')
 AUTHENTICATION_PORT = '50060'
 cache_service = cacheservice.CacheService(60000)
 
+CHUNK_SIZE = 1024 * 1024
+VIDEO_EXTENSION = ".mp4"
+
 
 def choose_cdn_server_port() -> str:
     for port in SERVER_PORTS:
         try:
+            print(f"trying {port}")
             channel = grpc.insecure_channel(f'localhost:{port}')
             stub = server_pb2_grpc.CdnServerStub(channel)
             stub.getVideoInformation(server_pb2.VideoRequest(videoId=1))
             print("connection secured")
             return port
-        except grpc.RpcError:
-            print("No server present")
-            exit(1)
+        except:
+            pass
+    exit(1)
 
 
 def retrieve_all_movies() -> List[Dict[str, Any]]:
@@ -74,6 +78,27 @@ def get_video_bytes_for_stream(id_: int, start: int, end: int) -> bytes:
     return video.get_bytes()
 
 
+def create_upload_iterator(filename: str):
+    filename = filename + VIDEO_EXTENSION
+    with open(filename, 'rb') as compressed_file:
+        while True:
+            chunk = compressed_file.read(CHUNK_SIZE)
+            if len(chunk) == 0:
+                return
+            yield server_pb2.Chunk(chunk=chunk)
+
+
+def upload(title: str, filename: str):
+    title = title.strip()
+    filename = filename.strip()
+    with grpc.insecure_channel('localhost:' + choose_cdn_server_port()) as channel:
+        stub = server_pb2_grpc.CdnServerStub(channel)
+        response = stub.RequestToUpload(server_pb2.UploadToServerRequest(title=title, filename=filename))
+        request_iterator = create_upload_iterator(filename)
+        stub.UploadVideo(request_iterator)
+        return response
+
+
 def create_user(username: str, password: str):
     with grpc.insecure_channel('localhost:' + AUTHENTICATION_PORT) as channel:
         stub = authentication_pb2_grpc.AuthenticationStub(channel)
@@ -89,4 +114,5 @@ def login(username: str, password: str):
 def is_authenticated(token: int, username: str) -> bool:
     with grpc.insecure_channel('localhost:' + AUTHENTICATION_PORT) as channel:
         stub = authentication_pb2_grpc.AuthenticationStub(channel)
-        return stub.is_authenticated(authentication_pb2.AuthenticationRequest(token=token, username=username)).can_log_in
+        return stub.is_authenticated(
+            authentication_pb2.AuthenticationRequest(token=token, username=username)).can_log_in
