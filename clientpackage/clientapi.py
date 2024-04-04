@@ -1,6 +1,5 @@
 from typing import Dict
 
-import grpc
 from fastapi import FastAPI, Response, Header
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,7 +7,6 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from clientpackage import cacheservice, clientservice
-from proto import server_pb2_grpc, server_pb2
 
 app = FastAPI()
 
@@ -66,25 +64,9 @@ async def stream_movie(id_: int = 0, range: str = Header(None)) -> Response:
     return Response(video_bytes, status_code=206, headers=headers, media_type="video/mp4")
 
 
-def create_upload_iterator(filename: str):
-    filename = filename + VIDEO_EXTENSION
-    with open(filename, 'rb') as compressed_file:
-        while True:
-            chunk = compressed_file.read(CHUNK_SIZE)
-            if len(chunk) == 0:
-                return
-            yield server_pb2.Chunk(chunk=chunk)
-
-
 @app.post("/upload")
 async def upload_movie(title: str, filename: str):
-    title = title.strip()
-    filename = filename.strip()
-    with grpc.insecure_channel('localhost:50051') as channel:
-        stub = server_pb2_grpc.CdnServerStub(channel)
-        response = stub.RequestToUpload(server_pb2.UploadToServerRequest(title=title, filename=filename))
-        request_iterator = create_upload_iterator(filename)
-        stub.UploadVideo(request_iterator)
+    response = clientservice.upload(title, filename)
 
     return response.ack
 
