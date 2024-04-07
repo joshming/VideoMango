@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from clientpackage import cacheservice, clientservice
+from clientpackage import clientservice
 
 app = FastAPI()
 
@@ -24,8 +24,6 @@ app.add_middleware(
 
 CHUNK_SIZE = 1024 * 1024
 VIDEO_EXTENSION = ".mp4"
-
-cache_service = cacheservice.CacheService(60000)
 
 
 @app.get("/movies")
