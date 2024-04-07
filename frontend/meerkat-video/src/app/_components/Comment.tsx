@@ -32,11 +32,12 @@ export default function Comment({id}: { id: number }) {
                 return (
                     <div className={`grid grid-cols-4 grid-rows-2 w-full mb-2`}>
                         <h3 className={`col-span-4 row-span-1 m-0 font-bold`}>{message.user}:</h3>
-                        <p className={`col-span-3`}>{message.message}</p>
+                        <p className={`col-span-3`}>{message.message.replaceAll("`", "'")}</p>
                         <p className={`col-span-1`}>{message.time}</p>
                     </div>
                 )
             })
+            commentJSX.reverse();
             setComments(commentJSX);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -45,7 +46,7 @@ export default function Comment({id}: { id: number }) {
 
     const postComment = async () => {
         try {
-            const pythonSafeString = newComment.replace("'", "`");
+            const pythonSafeString = newComment.replaceAll("'", "`");
             console.log(pythonSafeString);
             const postBody = { "message": pythonSafeString}
             const response = await fetch(`http://localhost:3000/api/comments?id=${id}`, {

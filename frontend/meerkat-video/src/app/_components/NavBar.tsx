@@ -5,13 +5,15 @@ import Login from "@/app/_components/Login";
 export default function NavBar() {
     return (
         <div className="nav">
-            <Image 
+            <Link href={`/watch`}>
+                <Image
                 className="image"
                 src='/logofull.png'
                 height={200}
                 width={200}
                 alt="Mango icon"
             />
+            </Link>
             <div className="links">
                 <Link className="navlink" href={`/`}>About</Link>
                 <Link className="navlink" href={`/watch`}>Watch</Link>

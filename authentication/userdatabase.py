@@ -11,16 +11,16 @@ class UserDatabase:
 
     def __init__(self, port: str):
         self.location = f"videoDatabase{port}.db"
+        self.createTable()
 
     def create_connection(self) -> tuple[Connection, Cursor]:
         """
         Creates a connection to the database and a cursor for that connection
         :return: Tuple of a connection and a cursor
         """
-        connection = sqlite3.connect(LOCATION)
+        connection = sqlite3.connect(self.location)
         cursor = connection.cursor()
         return connection, cursor
-
 
     def createTable(self) -> None:
         """
@@ -29,12 +29,11 @@ class UserDatabase:
         """
         sql = 'create table if not exists ' + TABLE + ('(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password '
                                                        'TEXT)')
-        conn = sqlite3.connect(LOCATION)
+        conn = sqlite3.connect(self.location)
         cursor = conn.cursor()
         cursor.execute(sql)
         conn.commit()
         conn.close()
-
 
     def create_user(self, username: str, password: str) -> bool:
         conn, cursor = self.create_connection()
@@ -51,7 +50,6 @@ class UserDatabase:
         conn.close()
         return True
 
-
     def verify_user(self, username: str, password: str) -> bool:
         conn, cursor = self.create_connection()
         sql = f'select password from {TABLE} where username=\"{username}\"'
@@ -63,7 +61,6 @@ class UserDatabase:
         if result:
             return password == result[0]
         return False
-
 
     def get_user_information(self, username: str) -> Tuple[Any]:
         conn, cursor = self.create_connection()

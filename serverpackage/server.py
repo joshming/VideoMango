@@ -1,8 +1,6 @@
 import signal
-import sys
 import threading
 import time
-
 from concurrent import futures
 from datetime import datetime
 from pathlib import Path
@@ -20,7 +18,7 @@ VIDEO_PATH = "./videos/"
 VIDEO_EXTENSION = ".mp4"
 
 OTHER_SERVER_PORTS = ["50051", "50052", "50053"]
-REPLICATION_INTERVAL = 5
+REPLICATION_INTERVAL = 300
 
 
 def get_titles(port: str) -> List[server_pb2.Title]:
