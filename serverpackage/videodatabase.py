@@ -25,7 +25,7 @@ def _createTable(port: str) -> None:
     Creates the database table
     :return: None
     """
-    sql = 'create table if not exists ' + TABLE + ('(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, file TEXT, '
+    sql = 'create table if not exists ' + TABLE + ('(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE, file TEXT, '
                                                    'size INTEGER)')
     conn = sqlite3.connect(LOCATION + port + ".db")
     cursor = conn.cursor()
