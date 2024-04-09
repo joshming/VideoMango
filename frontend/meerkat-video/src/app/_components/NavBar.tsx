@@ -9,8 +9,8 @@ export default function NavBar() {
                 <Image
                 className="image"
                 src='/logofull.png'
-                height={200}
-                width={200}
+                height={160}
+                width={160}
                 alt="Mango icon"
             />
             </Link>

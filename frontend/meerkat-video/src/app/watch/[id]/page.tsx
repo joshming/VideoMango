@@ -30,14 +30,12 @@ export default async function VideoPlayer({ params }: {
                 <div className="purplebox">
                     <Video videoId={params.id}/>
                 </div>
-            </div>
-            <div className="borderright"/>
-            <div className="flex justify-center">
-                <div className={`flex flex-col bg-off-white rounded-md w-4/5 p-5`}>
-                    <h2>Comments</h2>
+                <div className="purplebox">
                     <Comment id={params.id}/>
                 </div>
             </div>
+            <div className="borderright"/>
+
         </div>
     );
 }

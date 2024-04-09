@@ -230,6 +230,11 @@ h3 {
   margin-bottom: 30%;
 }
 
+.comments {
+  display: flex;
+  flex-direction: column;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
