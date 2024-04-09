@@ -22,14 +22,14 @@ export default function Home() {
           <div style={{ margin: '15px' }}>
             <h2>Welcome to VideoMango!</h2>
             <h3>This is a video streaming platform to allow you and your friends watch movies together.</h3>
-            <h3>--- add instructions ---</h3>
-            <h3>Made by Josh, Nic, Bart, Julia</h3>
+            <h3></h3>
+            <br></br>
+            <h3>Made by Joshua, Nicolas, Bartek, Julia</h3>
           </div>
         </div>
-        <div className="purplebox">
-          <h2>Code Highlights</h2>
-          <h3>--- add important code details ---</h3>
-        </div>
+        {/* <div className="purplebox">
+          <h2>Description</h2>
+        </div> */}
       </div>
       <div className="borderright" />
     </main>
