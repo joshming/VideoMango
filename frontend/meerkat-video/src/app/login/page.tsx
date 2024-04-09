@@ -2,12 +2,22 @@
 
 import React, { useState, FormEvent} from "react";
 import { useRouter } from 'next/navigation';
-import Error from "@/app/_components/Error";
+// import Error from "@/app/_components/Error";
+import {useSearchParams, usePathname} from "next/navigation";
+import Link from "next/link"
 
 export default function Login() {
     const router = useRouter();
     const [isSuccess, setIsSuccess] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    // const searchParams = useSearchParams();
+    // const modal = searchParams.get("modal");
+    // const pathname = usePathname();
+
+    const [showModal, setShowModal] = useState(false);
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
 
     async function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -41,11 +51,12 @@ export default function Login() {
     }
 
     return (
-      <main>
-        <div className="flex justify-center">
-          <div className="backdrop-blur-md bg-amber-200 absolute p-4 text-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-2xl">
+      <> 
+      <button onClick={openModal}>Log in</button>
+      {showModal &&
+        <dialog>
             <h1 className="text-xl">Login</h1>
-              { isSuccess ? <></> : <Error message={error} /> }
+              { isSuccess ? <></> : <h1></h1> }
             <form onSubmit={onSubmit}>
                 <div className="grid grid-cols-3 gap-4 m-5 justify-center">
                     <div>
@@ -64,9 +75,8 @@ export default function Login() {
                     <button className="bg-sage p-2 rounded-xl hover:bg-amber-600">Login</button>
                 </div>
             </form>
-          </div>
-
-        </div>
-      </main>
+        </dialog>
+        }
+      </>
     );
   }
