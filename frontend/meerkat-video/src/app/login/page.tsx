@@ -42,7 +42,7 @@ export default function Login() {
                 setError(data["message"])
                 return;
             }
-
+            closeModal();
             router.push('/watch');
         } catch (error) {
             setIsSuccess(false);
@@ -51,12 +51,10 @@ export default function Login() {
     }
 
     return (
-      <> 
-      <button onClick={openModal}>Log in</button>
-      {showModal &&
-        <dialog>
+       <main>
+        <div className="flex justify-center">
+          <div className="backdrop-blur-md bg-amber-200 absolute p-4 text-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-2xl">
             <h1 className="text-xl">Login</h1>
-              { isSuccess ? <></> : <h1></h1> }
             <form onSubmit={onSubmit}>
                 <div className="grid grid-cols-3 gap-4 m-5 justify-center">
                     <div>
@@ -75,8 +73,8 @@ export default function Login() {
                     <button className="bg-sage p-2 rounded-xl hover:bg-amber-600">Login</button>
                 </div>
             </form>
-        </dialog>
-        }
-      </>
+          </div>
+        </div>
+      </main>
     );
   }

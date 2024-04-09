@@ -42,8 +42,7 @@ export default function Login() {
             let requestBody: {} = {};
             // @ts-ignore
             formData.forEach((value, key) => requestBody[key] = value);
-
-            const response = await fetch('http://localhost:8000/user/login', {
+            const response = await fetch('/api/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,11 +52,12 @@ export default function Login() {
 
             if (!response.ok) {
                 const data = await response.json()
-                console.log(data)
+                console.log("Error" + JSON.stringify(data));
                 setIsSuccess(false)
                 setError(data["message"])
                 return;
             }
+            closeModal();
             router.push('/watch');
         } catch (error) {
             setIsSuccess(false);
