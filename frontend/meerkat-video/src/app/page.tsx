@@ -6,18 +6,17 @@ import Link from "next/link"
 export default function Home() {
   return (
     <main>
-      <NavBar />
-      <div className="borderleft" />
-      <div className='bodyarea'>
-        <div className="purplebox">
-          <div className="imgcontainer">
-            <Image
-              src="/meerkats.png"
-              // fill
-              height={400}
-              width={400}
-              sizes="(max-width: 400px) 400px, (max-width: 400px) 400px"
-              alt="Cartoon picture of meerkats programming"
+        <NavBar/>
+        <div className="borderleft"/>
+        <div className='bodyarea'>
+          <div className="purplebox">
+            <div className="imgcontainer">
+              <Image
+                src="/meerkats.png"
+                height={400}
+                width={400}
+                // layout="fill"
+                alt="Cartoon picture of meerkats programming"
             />
           </div>
           <div style={{ margin: '15px' }}>
