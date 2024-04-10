@@ -67,7 +67,7 @@ export default function Login() {
 
     return (
         <>
-            <button className="navbutton" onClick={openModal}>Log in</button>
+            {!isSuccess && <button className="navbutton" onClick={openModal}>Log in</button>}
             {showModal &&
                 <div className="modal">
                     <div className="modalbox" id="modal-box">
