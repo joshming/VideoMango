@@ -23,8 +23,15 @@ def create_connection(location: str):
 
 
 def clear_database(location: str, table: str): 
-      sql = f'drop table {table}'
+      sql = f'drop table if exists {table}'
       conn, cursor = create_connection(location)
       cursor.execute(sql)
       conn.commit()
       conn.close()
+
+def add_user(connection, cursor, table, username, password):
+    insert_statement = f'insert into {table} (username, password) values (\"{username}\", \"{password}\")'
+    cursor.execute(insert_statement)
+    connection.commit()
+    cursor.close()
+    connection.close()
