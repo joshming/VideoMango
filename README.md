@@ -23,7 +23,7 @@ python startserver.py <port>
 
 To Start the authentication server, 
 ```{shell}
-python startserver.py 50060
+python startauthentication.py 50060
 ```
 
 To start the frontend, assuming in root directory `VideoMango`
