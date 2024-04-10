@@ -4,6 +4,7 @@ export async function POST(req: Request | NextRequest) {
     const body = await req.json();
     const {username, password}: { username: string, password: string } = body;
     const authJson = {username, password}
+    console.log("This is the authJson" + authJson);
     const authResponse = await fetch('http://localhost:8000/user/login', {
         method: 'POST',
         headers: {

@@ -43,7 +43,8 @@ class CdnServerServicer(server_pb2_grpc.CdnServerServicer):
 
     def __init__(self, port: str):
         self.different_ports = OTHER_SERVER_PORTS
-        self.different_ports.remove(port)
+        if port in self.different_ports:    
+            self.different_ports.remove(port)
         self.video_database = VideoDatabase(port)
         signal.signal(signal.SIGTERM, self.close_thread)
         self.replication_continue = True

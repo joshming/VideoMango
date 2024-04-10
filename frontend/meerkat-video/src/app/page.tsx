@@ -13,27 +13,25 @@ export default function Home() {
             <div className="imgcontainer">
               <Image
                 src="/meerkats.png"
-                // height={400}
-                // width={400}
-                layout="fill"
+                height={400}
+                width={400}
+                // layout="fill"
                 alt="Cartoon picture of meerkats programming"
             />
-            </div>
-            <div style={{margin: '15px'}}>
-              <h2>Welcome to VideoMango!</h2>
-              <h3>This is a video streaming platform to allow you and your friends watch movies together.</h3>
-              <h3>--- add instructions ---</h3>
-              <h3>Made by Josh, Nic, Bart, Julia</h3>
-            </div>
           </div>
-          <div className="purplebox">
-             <Link href={`/login`}> Login </Link>
-             <Link href={`/signup`}> Sign Up </Link>
-            <h2>Code Highlights</h2>
-            <h3>--- add important code details ---</h3>
+          <div style={{ margin: '15px' }}>
+            <h2>Welcome to VideoMango!</h2>
+            <h3>This is a video streaming platform to allow you and your friends watch movies together.</h3>
+            <h3></h3>
+            <br></br>
+            <h3>Made by Joshua, Nicolas, Bartek, Julia</h3>
           </div>
         </div>
-        <div className="borderright"/>
+        {/* <div className="purplebox">
+          <h2>Description</h2>
+        </div> */}
+      </div>
+      <div className="borderright" />
     </main>
   );
 }
